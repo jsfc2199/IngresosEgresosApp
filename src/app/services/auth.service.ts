@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -25,5 +26,11 @@ export class AuthService {
 
   logout(){
     return signOut(this.auth)
+  }
+
+  isAuth(){
+    return authState(this.auth).pipe(
+      map(firebaseUser => firebaseUser != null)
+    )
   }
 }

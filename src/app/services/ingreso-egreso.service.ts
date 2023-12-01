@@ -7,8 +7,8 @@ import { Subscription, map } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class IngresoEgresoService implements OnDestroy {
-  private collectionSubscription: Subscription = new Subscription();
+export class IngresoEgresoService {
+
 
   constructor(
     private firestore: Firestore,
@@ -80,7 +80,7 @@ export class IngresoEgresoService implements OnDestroy {
     Dado que por cada documento dentro de items podemos conocer todos sus datos podemos simplemente retornar un objeto como queramos, en este caso uno con el uid del documento
     dentro de firebase y aparte la data del documento como dal es decir el monto, la descipcion y el tipo
     */
-    this.collectionSubscription = collectionSnapshots(collection(this.firestore, `${uid}/ingreso-egreso/items`))
+    return collectionSnapshots(collection(this.firestore, `${uid}/ingreso-egreso/items`))
     .pipe(
       map(collectionItems => {
           return collectionItems.map(documentoItem => {
@@ -94,14 +94,6 @@ export class IngresoEgresoService implements OnDestroy {
 
           })
         }))
-        .subscribe(resp => console.log(resp))
-
-
-    return this.collectionSubscription
-  }
-
-  ngOnDestroy(): void {
-    this.collectionSubscription.unsubscribe()
   }
 }
 

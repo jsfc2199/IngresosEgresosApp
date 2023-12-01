@@ -1,17 +1,20 @@
-import { Injectable } from '@angular/core';
-import { Firestore, collection, doc, setDoc } from '@angular/fire/firestore';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Firestore, collection, collectionSnapshots, doc, setDoc } from '@angular/fire/firestore';
 import { IngresoEgreso } from '../models/ingreso-egreso.model';
 import { AuthService } from './auth.service';
+import { Subscription, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class IngresoEgresoService {
+export class IngresoEgresoService implements OnDestroy {
+  private collectionSubscription: Subscription = new Subscription();
 
   constructor(
     private firestore: Firestore,
     private authService: AuthService
     ) { }
+
 
   crearIngresoEgreso(ingresoEgreso: IngresoEgreso){
     const uid = this.authService.user?.uid
@@ -62,4 +65,48 @@ export class IngresoEgresoService {
     return setDoc(documentRef, { ...ingresoEgreso })
 
   }
+
+  initIngresosEgressosListener(uid: string){
+    /*
+    tal como se hizo con el usuario con el onSnapshot para escuchar los cambios si se hacen directos en la base de datos, el collectionSnapshosts nos permite hacer lo mismo
+    pero ya para una colección, este retorna un observable al cual podemos suscribirnos
+    collectionSnapshots recibe como argumento la ubicación de la coleccion en firebase
+
+    Dado que es un observable ya a este podemos usar los operadores de rxjs. Usamos el pipe para pasar la información por el flujo que requeeramos
+
+    Primero se usa el map para obtener como tal la coleccion items en firebase.
+    Una vez tengamos la coleccion podemos mapear esta información, es decir, mapearemos los documentos dentro de items
+
+    Dado que por cada documento dentro de items podemos conocer todos sus datos podemos simplemente retornar un objeto como queramos, en este caso uno con el uid del documento
+    dentro de firebase y aparte la data del documento como dal es decir el monto, la descipcion y el tipo
+    */
+    this.collectionSubscription = collectionSnapshots(collection(this.firestore, `${uid}/ingreso-egreso/items`))
+    .pipe(
+      map(collectionItems => {
+          return collectionItems.map(documentoItem => {
+
+            const documentData = documentoItem.data() as itemsData
+
+            return {
+              uid: documentoItem.id,
+              ...documentData
+            }
+
+          })
+        }))
+        .subscribe(resp => console.log(resp))
+
+
+    return this.collectionSubscription
+  }
+
+  ngOnDestroy(): void {
+    this.collectionSubscription.unsubscribe()
+  }
+}
+
+interface itemsData {
+  descripcion: string;
+  monto: number;
+  tipo: string;
 }

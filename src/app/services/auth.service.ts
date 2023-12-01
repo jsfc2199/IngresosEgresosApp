@@ -26,6 +26,11 @@ export class AuthService {
   ) {}
 
   userSubscription!: Unsubscribe;
+  private _user!: Usuario | null
+
+  get user(){
+    return this._user
+  }
 
   //nos avisa cuando haya cambios en el estado del usuario
   initAuthListener() {
@@ -45,6 +50,7 @@ export class AuthService {
 
             //se setea el usuario para pasarlo al dispatch
             const newUser = Usuario.fromFirebase(docUserData);
+            this._user = newUser
 
             //dispatch dela accion que setea el usuario
             this.store.dispatch(auth.setUser({ user: newUser }));
@@ -55,9 +61,10 @@ export class AuthService {
         //Se hace de esta forma porque el onSnapshot retorna una function que puede ser llamada para cancelar la suscripcion tal como indica la documentación
         //@returns
         //An unsubscribe function that can be called to cancel the snapshot listener.
-        
+
         //Por lo anterior estamos preguntando si en la suscripción hay data, y si la hay ejecute la desuscripción a partir del retorno de la misma
         //Por ello se ejecuta this.userSubscription() como si fuera un método
+        this._user = null
         this.userSubscription ? this.userSubscription() : null
         this.store.dispatch(auth.unsetUser());
       }

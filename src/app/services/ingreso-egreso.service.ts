@@ -62,6 +62,8 @@ export class IngresoEgresoService {
     setDoc(documentRef, { ...ingresoEgreso }).then(()=> console.log('documento insertado con exito', documentRef))
     */
 
+    delete ingresoEgreso.uid
+
     return setDoc(documentRef, { ...ingresoEgreso })
 
   }
@@ -98,7 +100,7 @@ export class IngresoEgresoService {
 
   borrarIngresoEgreso(uid: string){
     const userUid = this.authService.user?.uid
-    
+
     //nos ubicamos en el documento relacionado a cada item
     const itemDoc = doc(this.firestore, `${userUid}/ingreso-egreso/items/${uid}`)
 

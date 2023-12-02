@@ -6,6 +6,12 @@ import { IngresoEgreso } from 'src/app/models/ingreso-egreso.model';
 import { IngresoEgresoService } from 'src/app/services/ingreso-egreso.service';
 import Swal from 'sweetalert2';
 
+interface itemWithUid {
+  descripcion:string,
+  monto:number,
+  tipo:string,
+  uid:string
+}
 @Component({
   selector: 'app-detalle',
   templateUrl: './detalle.component.html',
@@ -24,8 +30,8 @@ export class DetalleComponent implements OnInit, OnDestroy {
       });
   }
 
-  borrar(uid: string) {
-    this.ingresoEgresoService.borrarIngresoEgreso(uid).then(()=>{
+  borrar(uid: string | undefined) {
+    this.ingresoEgresoService.borrarIngresoEgreso(uid!).then(()=>{
       Swal.fire({
         icon: 'success',
         title: 'Item eliminado',

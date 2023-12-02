@@ -14,6 +14,7 @@ import { collection, doc, setDoc } from '@firebase/firestore';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.reducer';
 import * as auth from '../auth/auth.actions';
+import * as ingresoEgreso from '../ingreso-egreso/ingreso-egreso.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -54,6 +55,8 @@ export class AuthService {
 
             //dispatch dela accion que setea el usuario
             this.store.dispatch(auth.setUser({ user: newUser }));
+
+
           }
         );
       } else {
@@ -65,6 +68,9 @@ export class AuthService {
         //Por lo anterior estamos preguntando si en la suscripción hay data, y si la hay ejecute la desuscripción a partir del retorno de la misma
         //Por ello se ejecuta this.userSubscription() como si fuera un método
         this._user = null
+        
+        //limpiamos los items
+        this.store.dispatch(ingresoEgreso.unSetItems())
         this.userSubscription ? this.userSubscription() : null
         this.store.dispatch(auth.unsetUser());
       }

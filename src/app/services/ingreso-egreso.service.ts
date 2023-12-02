@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Firestore, collection, collectionSnapshots, doc, setDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionSnapshots, deleteDoc, doc, setDoc } from '@angular/fire/firestore';
 import { IngresoEgreso } from '../models/ingreso-egreso.model';
 import { AuthService } from './auth.service';
 import { Subscription, map } from 'rxjs';
@@ -94,6 +94,16 @@ export class IngresoEgresoService {
 
           })
         }))
+  }
+
+  borrarIngresoEgreso(uid: string){
+    const userUid = this.authService.user?.uid
+    
+    //nos ubicamos en el documento relacionado a cada item
+    const itemDoc = doc(this.firestore, `${userUid}/ingreso-egreso/items/${uid}`)
+
+    //usamos el deleteDoc para borrar el documento que queremos
+    return deleteDoc(itemDoc)
   }
 }
 

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Subscription, filter } from 'rxjs';
 import { AppState } from 'src/app/app.reducer';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -17,7 +17,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
   activeUserName: string= ''
 
   ngOnInit(): void {
-    this.userSubscription = this.store.select('user').subscribe(user => {
+    this.userSubscription = this.store.select('user').pipe(filter(({user})=> user != null)).subscribe(user => {
       this.activeUserName = user.user!.nombre
     })
   }

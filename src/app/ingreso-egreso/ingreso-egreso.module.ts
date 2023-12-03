@@ -9,6 +9,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
 import { SharedModule } from '../shared/shared.module';
 import { DashboardRoutesModule } from '../dashboard/dashboard-routes.module';
+import { StoreModule } from '@ngrx/store';
+import { ingresoEgresoReducer } from './ingreso-egreso-reducer';
 
 @NgModule({
   declarations: [
@@ -22,9 +24,9 @@ import { DashboardRoutesModule } from '../dashboard/dashboard-routes.module';
     CommonModule,
     ReactiveFormsModule,
     NgChartsModule,
-
     SharedModule, //Se importa el shared module porque ingreso egreso usa estos elemtos
-    DashboardRoutesModule
+    DashboardRoutesModule,
+    StoreModule.forFeature('ingresosEgresos', ingresoEgresoReducer)
   ]
 })
 export class IngresoEgresoModule { }

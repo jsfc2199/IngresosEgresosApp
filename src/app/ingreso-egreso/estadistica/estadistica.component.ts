@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
-import { AppState } from 'src/app/app.reducer';
 import { IngresoEgreso } from 'src/app/models/ingreso-egreso.model';
+import { AppStateWithIngresoEgreso } from '../ingreso-egreso-reducer';
 
 @Component({
   selector: 'app-estadistica',
@@ -20,7 +20,7 @@ export class EstadisticaComponent implements OnInit, OnDestroy {
   };
   public doughnutChartType: ChartType = 'doughnut';
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppStateWithIngresoEgreso>) {}
 
   ngOnDestroy(): void {
     this.itemsSubscription.unsubscribe();

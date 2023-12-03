@@ -8,6 +8,7 @@ import { IngresoEgresoComponent } from './ingreso-egreso.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
 import { SharedModule } from '../shared/shared.module';
+import { DashboardRoutesModule } from '../dashboard/dashboard-routes.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { SharedModule } from '../shared/shared.module';
     ReactiveFormsModule,
     NgChartsModule,
 
-    SharedModule //Se importa el shared module porque ingreso egreso usa estos elemtos
+    SharedModule, //Se importa el shared module porque ingreso egreso usa estos elemtos
+    DashboardRoutesModule
   ]
 })
 export class IngresoEgresoModule { }

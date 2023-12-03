@@ -17,8 +17,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 
 import { AuthModule } from './auth/auth.module';
-import { SharedModule } from './shared/shared.module';
-import { IngresoEgresoModule } from './ingreso-egreso/ingreso-egreso.module';
+
 
 @NgModule({
   declarations: [
@@ -31,8 +30,9 @@ import { IngresoEgresoModule } from './ingreso-egreso/ingreso-egreso.module';
 
     //se borra el sharedModule ya que solo se debe de ver cuando inicia sesion, es decir ingresoEgresoModule
     //SharedModule,
-    
-    IngresoEgresoModule,
+
+    //se quita el modulo para cargarlo mediante lazy load
+    // IngresoEgresoModule,
 
     BrowserModule,
     AppRoutingModule,
